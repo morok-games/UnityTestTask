@@ -1,3 +1,4 @@
+using _Bludoku.Scripts.Boards;
 using UnityEngine;
 
 namespace _Bludoku.Scripts.Score
@@ -7,20 +8,34 @@ namespace _Bludoku.Scripts.Score
         private static int _score;
         private static int _highScore;
         private static bool _isBoosterEnabled;
-        
+
+        private static ClearShape _comboShape;
+        private static int _comboCounter;
+
         private const string ScoreKey = "CurrentScore";
         private const string HighScoreKey = "HighScore";
         private const string BoosterKey = "Booster";
+        private const string ComboShapeKey = "ComboShape";
+        private const string ComboCounterKey = "ComboCounter";
+
         private const int ScoreForSet = 1;
         private const float BoosterMultiplier = 1.5f;
 
         public static int Score => _score;
         public static int HighScore => _highScore;
         public static bool IsBoosterEnabled => _isBoosterEnabled;
+        public static ClearShape ComboShape => _comboShape;
+        public static int ComboCounter => _comboCounter;
 
         public static void SetBoosterEnabled(bool enabled)
         {
             _isBoosterEnabled = enabled;
+        }
+
+        public static void SetCombo(ClearShape shape, int counter)
+        {
+            _comboShape = shape;
+            _comboCounter = counter;
         }
 
         public static void LoadScore()
@@ -28,6 +43,9 @@ namespace _Bludoku.Scripts.Score
             _score = PlayerPrefs.GetInt(ScoreKey, 0);
             _highScore = PlayerPrefs.GetInt(HighScoreKey, 0);
             _isBoosterEnabled = PlayerPrefs.GetInt(BoosterKey) == 1;
+
+            _comboShape = (ClearShape)PlayerPrefs.GetInt(ComboShapeKey, 0);
+            _comboCounter = PlayerPrefs.GetInt(ComboCounterKey, 0);
         }
         
         public static void AddSetScore(int setsCount)
@@ -60,6 +78,10 @@ namespace _Bludoku.Scripts.Score
             PlayerPrefs.SetInt(BoosterKey, IsBoosterEnabled ? 1 : 0);
             PlayerPrefs.SetInt(ScoreKey, Score);
             PlayerPrefs.SetInt(HighScoreKey, HighScore);
+
+            PlayerPrefs.SetInt(ComboShapeKey, (int)ComboShape);
+            PlayerPrefs.SetInt(ComboCounterKey, ComboCounter);
+
             PlayerPrefs.Save();
         }
     }
