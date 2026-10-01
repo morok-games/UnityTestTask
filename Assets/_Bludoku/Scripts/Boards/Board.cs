@@ -100,7 +100,7 @@ namespace _Bludoku.Scripts.Boards
                 if (figure.Grid[i, j] != 0)
                     simGrid[y + i, x + j] = figure.Grid[i, j];
 
-            bool[,] willClear = BuildClearMask(simGrid, out var remove);
+            bool[,] willClear = BuildClearMask(simGrid, out var remove, out var shapes);
 
             for (int i = 0; i < figure.Grid.GetLength(0); i++)
             for (int j = 0; j < figure.Grid.GetLength(1); j++)
@@ -120,11 +120,12 @@ namespace _Bludoku.Scripts.Boards
 
         public ClearResult CheckAndClear()
         {
-            bool[,] toClear = BuildClearMask(_grid, out var remove);
+            bool[,] toClear = BuildClearMask(_grid, out var remove, out var shapes);
             var result = new ClearResult
             { 
                 ClearedPositions = new List<Vector3>(),
-                FiguresRemovedCount = remove
+                FiguresRemovedCount = remove,
+                ClearedShapes = shapes
             };
 
             for (int row = 0; row < 9; row++)
@@ -185,10 +186,11 @@ namespace _Bludoku.Scripts.Boards
             return new Vector2(xPos, yPos);
         }
 
-        private static bool[,] BuildClearMask(int[,] grid, out int figuresToRemove)
+        private static bool[,] BuildClearMask(int[,] grid, out int figuresToRemove, out ClearShape clearedShapes)
         {
             bool[,] mask = new bool[9, 9];
             figuresToRemove = 0;
+            clearedShapes = ClearShape.None;
 
             for (int row = 0; row < 9; row++)
             {
@@ -196,6 +198,7 @@ namespace _Bludoku.Scripts.Boards
                 {
                     MarkRow(mask, row);
                     figuresToRemove++;
+                    clearedShapes |= ClearShape.Row;
                 }
             }
 
@@ -205,6 +208,7 @@ namespace _Bludoku.Scripts.Boards
                 {
                     MarkColumn(mask, col);
                     figuresToRemove++;
+                    clearedShapes |= ClearShape.Column;
                 }
             }
 
@@ -216,6 +220,7 @@ namespace _Bludoku.Scripts.Boards
                     {
                         MarkBox(mask, boxRow, boxCol);
                         figuresToRemove++;
+                        clearedShapes |= ClearShape.Box;
                     }
                 }
             }
