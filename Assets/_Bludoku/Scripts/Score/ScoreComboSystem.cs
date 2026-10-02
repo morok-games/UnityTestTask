@@ -7,7 +7,7 @@ namespace _Bludoku.Scripts.Score
         private ClearShape _shape;
         private int _counter;
 
-        private const int StartCounter = 5;
+        private const int StartCounter = 3;
 
         public bool IsActive => _shape != ClearShape.None;
         public ClearShape Shape => _shape;
@@ -34,7 +34,7 @@ namespace _Bludoku.Scripts.Score
                 return bonus;
             }
 
-            _shape = shapes;
+            _shape = PickShape(shapes);
             _counter = StartCounter;
             return 0;
         }
@@ -53,8 +53,19 @@ namespace _Bludoku.Scripts.Score
                 return;
             }
 
-            _shape = shape;
+            _shape = PickShape(shape);
             _counter = counter;
+        }
+
+        private static ClearShape PickShape(ClearShape shapes)
+        {
+            if ((shapes & ClearShape.Box) != ClearShape.None)
+                return ClearShape.Box;
+
+            if ((shapes & ClearShape.Row) != ClearShape.None)
+                return ClearShape.Row;
+
+            return ClearShape.Column;
         }
     }
 }
