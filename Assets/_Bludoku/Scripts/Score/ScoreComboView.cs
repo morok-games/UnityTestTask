@@ -118,6 +118,7 @@ namespace _Bludoku.Scripts.Score
             combo.DOKill();
             _pulseTween?.Kill();
             _pulseTween = null;
+            combo.localScale = _isComboActive ? Vector3.one : Vector3.zero;
             _flyTween?.Kill();
             _flyTween = null;
             comboText.transform.DOKill();
