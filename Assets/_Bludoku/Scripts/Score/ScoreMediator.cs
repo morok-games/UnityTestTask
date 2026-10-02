@@ -1,10 +1,13 @@
 using _Bludoku.Scripts.Boards;
+using System;
 using UnityEngine;
 
 namespace _Bludoku.Scripts.Score
 {
     public class ScoreMediator : MonoBehaviour
     {
+        public event Action<ClearResult, int> OnFigureScored;
+
         [SerializeField] private ScoreView scoreView;
         [SerializeField] private Board board;
         [SerializeField] private ScoreBoosterView boosterView;
@@ -56,6 +59,8 @@ namespace _Bludoku.Scripts.Score
                 ScoreSystem.AddScore(comboBonus);
                 comboView.PlayBonusFly(comboBonus, () => scoreView.UpdateScore());
             }
+
+            OnFigureScored?.Invoke(result, comboBonus);
         }
 
         private void UpdateView()

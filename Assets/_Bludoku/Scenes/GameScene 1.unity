@@ -235,7 +235,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   board: {fileID: 1631287398}
+  scoreMediator: {fileID: 34727244}
   particles: {fileID: 5774820567226537956, guid: 3fc6780cf139b40268c1d690a155189c, type: 3}
+  comboParticles: {fileID: 5774820567226537956, guid: cbde9b7c2ac1d47409f822906c493693, type: 3}
 --- !u!1 &114302688
 GameObject:
   m_ObjectHideFlags: 0
