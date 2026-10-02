@@ -47,14 +47,15 @@ namespace _Bludoku.Scripts.Score
             ScoreSystem.SetCombo(_scoreComboSystem.Shape, _scoreComboSystem.Counter);
 
             ScoreSystem.AddSetScore(result.ClearedCount);
+            scoreView.UpdateScore();
+
+            comboView.UpdateBonus(_scoreComboSystem.IsActive, _scoreComboSystem.Shape, _scoreComboSystem.Counter);
 
             if (comboBonus > 0)
             {
                 ScoreSystem.AddScore(comboBonus);
+                comboView.PlayBonusFly(comboBonus, () => scoreView.UpdateScore());
             }
-
-            scoreView.UpdateScore();
-            comboView.UpdateBonus(_scoreComboSystem.IsActive, _scoreComboSystem.Shape, _scoreComboSystem.Counter);
         }
 
         private void UpdateView()
