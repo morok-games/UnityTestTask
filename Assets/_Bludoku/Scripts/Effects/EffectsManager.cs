@@ -11,13 +11,13 @@ namespace _Bludoku.Scripts.Effects
         [SerializeField] private ParticleSystem comboParticles;
 
         private ParticleEffect _particleEffect;
-        private ParticleEffect _comboParticleEffect;
+        private ComboParticleEffect _comboParticleEffect;
         private VibrationEffect _vibrationEffect;
         
         private void Awake()
         {
             _particleEffect = new ParticleEffect(particles);
-            _comboParticleEffect = new ParticleEffect(comboParticles);
+            _comboParticleEffect = new ComboParticleEffect(comboParticles);
             _vibrationEffect = new VibrationEffect();
 
             scoreMediator.OnFigureScored += OnFigureScored;
@@ -29,7 +29,7 @@ namespace _Bludoku.Scripts.Effects
 
             if (comboBonus > 0)
             {
-                _comboParticleEffect.Play(result);
+                _comboParticleEffect.Play(result, comboBonus);
             }
             else
             {

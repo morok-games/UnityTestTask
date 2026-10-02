@@ -12,11 +12,13 @@ namespace _Bludoku.Scripts.Effects
             _particle = particleSystem;
         }
         
-        public void Play(ClearResult result)
+        public void Play(ClearResult result, float sizeMultiplier = 1f)
         {
             foreach (var pos in result.ClearedPositions)
             {
                 var ps = Object.Instantiate(_particle, pos, Quaternion.identity);
+                var main = ps.main;
+                main.startSizeMultiplier *= sizeMultiplier;
                 ps.Play();
                 ps.gameObject.AddComponent<AutoDestroyParticle>();
             }
