@@ -9,15 +9,18 @@ namespace _Bludoku.Scripts.Effects
         [SerializeField] private ScoreMediator scoreMediator;
         [SerializeField] private ParticleSystem particles;
         [SerializeField] private ParticleSystem comboParticles;
+        [SerializeField] private Transform cameraTransform;
 
         private ParticleEffect _particleEffect;
         private ComboParticleEffect _comboParticleEffect;
+        private ScreenShakeEffect _screenShakeEffect;
         private VibrationEffect _vibrationEffect;
         
         private void Awake()
         {
             _particleEffect = new ParticleEffect(particles);
             _comboParticleEffect = new ComboParticleEffect(comboParticles);
+            _screenShakeEffect = new ScreenShakeEffect(cameraTransform);
             _vibrationEffect = new VibrationEffect();
 
             scoreMediator.OnFigureScored += OnFigureScored;
@@ -30,11 +33,17 @@ namespace _Bludoku.Scripts.Effects
             if (comboBonus > 0)
             {
                 _comboParticleEffect.Play(result, comboBonus);
+                _screenShakeEffect.Play(comboBonus);
             }
             else
             {
                 _particleEffect.Play(result);
             }
+        }
+
+        private void OnDisable()
+        {
+            _screenShakeEffect.Stop();
         }
     }
 }
