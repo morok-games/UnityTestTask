@@ -7,6 +7,7 @@ namespace _Bludoku.Scripts.Score
     public class ScoreMediator : MonoBehaviour
     {
         public event Action<ClearResult, int> OnFigureScored;
+        public event Action OnBoosterActivated;
 
         [SerializeField] private ScoreView scoreView;
         [SerializeField] private Board board;
@@ -42,6 +43,7 @@ namespace _Bludoku.Scripts.Score
 
         private void FigurePlaced(ClearResult result)
         {
+            bool wasBoosted = _scoreBoostSystem.IsBoosted;
             _scoreBoostSystem.FigurePlaced(result.ClearedCount);
             int comboBonus = _scoreComboSystem.FigurePlaced(result);
 
@@ -58,6 +60,11 @@ namespace _Bludoku.Scripts.Score
             {
                 ScoreSystem.AddScore(comboBonus);
                 comboView.PlayBonusFly(comboBonus, () => scoreView.UpdateScore());
+            }
+
+            if (!wasBoosted && _scoreBoostSystem.IsBoosted)
+            {
+                OnBoosterActivated?.Invoke();
             }
 
             OnFigureScored?.Invoke(result, comboBonus);

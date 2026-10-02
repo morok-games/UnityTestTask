@@ -2,6 +2,7 @@ using _Bludoku.Scripts.Boards;
 using _Bludoku.Scripts.Core;
 using _Bludoku.Scripts.Score;
 using _Bludoku.Scripts.UI;
+using System;
 using UnityEngine;
 
 namespace _Bludoku.Scripts
@@ -9,6 +10,8 @@ namespace _Bludoku.Scripts
     public class GameController : MonoBehaviour
     {
         public static GameController Instance { get; private set; }
+
+        public event Action OnSecondChanceUsed;
 
         [SerializeField] private ScoreMediator scoreMediator;
         [SerializeField] private UIMediator uiMediator;
@@ -44,6 +47,7 @@ namespace _Bludoku.Scripts
         {
             uiMediator.HideGameOver();
             figuresController.UpdateToEasyFigures();
+            OnSecondChanceUsed?.Invoke();
         }
 
         private void HandleGameOver()
