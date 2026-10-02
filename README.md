@@ -7,6 +7,7 @@ Unity 2022.3.62f3, Android.
 - **Combo system.** Clearing the same shape (row, column or 3×3 box) again continues the combo and gives a bonus equal to the combo counter (starts at 3, +1 per repeat). Each move without a clear decreases the counter, and at 0 the combo breaks. A different shape starts a new combo. The combo widget shows the shape to repeat and the next bonus. The combo state is saved between sessions.
 - **Combo VFX.** The bonus flies into the score, combo particles replace regular ones, and the camera shakes. Particle size and shake strength grow with the bonus.
 - **Analytics.** Events for placing/returning figures, combo bonus, booster activation and Second Chance usage, logged to the console by a debug provider.
+- **Fixes.** Enlarged the figure touch area to fill its tray slot (figures were hard to grab on a phone).
 
 ## Architectural Decisions
 
