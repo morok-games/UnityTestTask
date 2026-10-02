@@ -54,6 +54,7 @@ namespace _Bludoku.Scripts.Score
             booster.DOKill();
             _pulseTween?.Kill();
             _pulseTween = null;
+            booster.localScale = _isBoosterEnabled ? Vector3.one : Vector3.zero;
         }
     }
 }
