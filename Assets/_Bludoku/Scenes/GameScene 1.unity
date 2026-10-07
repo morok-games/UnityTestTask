@@ -1291,6 +1291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cf77b7c71837b64da445f62b3c89a8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  providers: 00000000
   figuresController: {fileID: 34727245}
   scoreMediator: {fileID: 34727244}
   gameController: {fileID: 34727242}
