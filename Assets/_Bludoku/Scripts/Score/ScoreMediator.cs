@@ -7,7 +7,9 @@ namespace _Bludoku.Scripts.Score
     public class ScoreMediator : MonoBehaviour
     {
         public event Action<ClearResult, int> OnFigureScored;
+        public event Action<int> OnComboCounterChanged;
         public event Action OnBoosterActivated;
+        public event Action OnScoreReset;
 
         [SerializeField] private ScoreView scoreView;
         [SerializeField] private Board board;
@@ -30,7 +32,7 @@ namespace _Bludoku.Scripts.Score
             scoreView.UpdateScore(false);
 
             _scoreComboSystem.Restore(ScoreSystem.ComboShape, ScoreSystem.ComboCounter);
-            comboView.UpdateBonus(_scoreComboSystem.IsActive, _scoreComboSystem.Shape, _scoreComboSystem.Counter);
+            UpdateCombo();
         }
 
         public void ResetScore()
@@ -39,6 +41,7 @@ namespace _Bludoku.Scripts.Score
             ScoreSystem.SetCombo(ClearShape.None, 0);
             ScoreSystem.ResetScore();
             UpdateView();
+            OnScoreReset?.Invoke();
         }
 
         private void FigurePlaced(ClearResult result)
@@ -54,7 +57,7 @@ namespace _Bludoku.Scripts.Score
             ScoreSystem.AddSetScore(result.ClearedCount);
             scoreView.UpdateScore();
 
-            comboView.UpdateBonus(_scoreComboSystem.IsActive, _scoreComboSystem.Shape, _scoreComboSystem.Counter);
+            UpdateCombo();
 
             if (comboBonus > 0)
             {
@@ -75,7 +78,13 @@ namespace _Bludoku.Scripts.Score
             boosterView.SetBoosterEnabled(false);
             _scoreBoostSystem.IsBoosted = false;
             scoreView.UpdateScore(false);
+            UpdateCombo();
+        }
+
+        private void UpdateCombo()
+        {
             comboView.UpdateBonus(_scoreComboSystem.IsActive, _scoreComboSystem.Shape, _scoreComboSystem.Counter);
+            OnComboCounterChanged?.Invoke(_scoreComboSystem.Counter);
         }
     }
 }
