@@ -1,4 +1,3 @@
-using _Bludoku.Scripts.Analytics.Events;
 using _Bludoku.Scripts.Blocks;
 using _Bludoku.Scripts.Boards;
 using _Bludoku.Scripts.Core;
@@ -43,28 +42,30 @@ namespace _Bludoku.Scripts.Analytics
 
         private void FigurePlaced(Figure figure)
         {
-            _analytics.Track(new FigurePlacedEvent(figure.ID));
+            _analytics.Track(AnalyticsEvent.FigurePlaced(figure.ID));   
         }
 
         private void FigureReturned(Figure figure)
         {
-            _analytics.Track(new FigureReturnedEvent(figure.ID));
+            _analytics.Track(AnalyticsEvent.FigureReturned(figure.ID));
         }
 
         private void FigureScored(ClearResult result, int comboBonus)
         {
             if (comboBonus > 0)
-                _analytics.Track(new ComboBonusReceivedEvent(comboBonus, result.ClearedShapes.ToString()));
+            {
+                _analytics.Track(AnalyticsEvent.ComboBonusReceived(comboBonus, result.ClearedShapes.ToString()));
+            }
         }
 
         private void BoosterActivated()
         {
-            _analytics.Track(new BoosterActivatedEvent());
+            _analytics.Track(AnalyticsEvent.BoosterActivated());
         }
 
         private void SecondChanceUsed()
         {
-            _analytics.Track(new PowerUpUsedEvent("second_chance"));
+            _analytics.Track(AnalyticsEvent.PowerUpUsed("second_chance"));
         }
 
         public enum ProviderType
