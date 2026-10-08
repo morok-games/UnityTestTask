@@ -6,6 +6,7 @@ namespace _Bludoku.Scripts.Effects
     public class ScreenShakeEffect
     {
         private readonly Transform _cameraTransform;
+        private Tween _shakeTween;
 
         private const float Duration = 0.25f;
         private const int Vibrato = 20;
@@ -22,13 +23,15 @@ namespace _Bludoku.Scripts.Effects
         {
             float strength = Mathf.Min(BaseStrength + bonus * StrengthPerBonus, MaxStrength);
 
-            _cameraTransform.DOKill(true);
-            _cameraTransform.DOShakePosition(Duration, new Vector3(strength, strength, 0f), Vibrato);
+            _shakeTween?.Complete();
+            _shakeTween = _cameraTransform
+                .DOShakePosition(Duration, new Vector3(strength, strength, 0f), Vibrato)
+                .OnComplete(() => _shakeTween = null);
         }
 
         public void Stop()
         {
-            _cameraTransform.DOKill(true);
+            _shakeTween?.Complete();
         }
     }
 }
