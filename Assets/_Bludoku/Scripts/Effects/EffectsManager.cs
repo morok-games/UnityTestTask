@@ -31,7 +31,6 @@ namespace _Bludoku.Scripts.Effects
 
             scoreMediator.OnFigureScored += OnFigureScored;
             scoreMediator.OnComboCounterChanged += OnComboChanged;
-            scoreMediator.OnScoreReset += _comboAmbientEffect.Clear;
         }
 
         private void OnFigureScored(ClearResult result, int comboBonus)

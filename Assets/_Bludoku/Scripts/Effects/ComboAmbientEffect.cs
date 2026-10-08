@@ -25,8 +25,7 @@ namespace _Bludoku.Scripts.Effects
 
             if (intensity <= 0f)
             {
-                _isActive = false;
-                _particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                Clear();
                 return;
             }
 
@@ -51,7 +50,7 @@ namespace _Bludoku.Scripts.Effects
             main.startSpeedMultiplier = speed;
         }
 
-        public void Clear()
+        private void Clear()
         {
             _isActive = false;
             _particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);

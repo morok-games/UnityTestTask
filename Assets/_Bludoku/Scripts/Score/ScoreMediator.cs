@@ -9,7 +9,6 @@ namespace _Bludoku.Scripts.Score
         public event Action<ClearResult, int> OnFigureScored;
         public event Action<int> OnComboCounterChanged;
         public event Action OnBoosterActivated;
-        public event Action OnScoreReset;
 
         [SerializeField] private ScoreView scoreView;
         [SerializeField] private Board board;
@@ -41,7 +40,6 @@ namespace _Bludoku.Scripts.Score
             ScoreSystem.SetCombo(ClearShape.None, 0);
             ScoreSystem.ResetScore();
             UpdateView();
-            OnScoreReset?.Invoke();
         }
 
         private void FigurePlaced(ClearResult result)
