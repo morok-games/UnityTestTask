@@ -3,6 +3,7 @@ using DG.Tweening;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace _Bludoku.Scripts.Score
 {
@@ -19,6 +20,7 @@ namespace _Bludoku.Scripts.Score
         private const float FlyDuration = 0.5f;
         private const float PunchDuration = 0.3f;
 
+        private ObjectPool<TMP_Text> _flyTextPool;
         private bool _isComboActive;
         private int _value;
         private Tween _pulseTween;
@@ -27,6 +29,13 @@ namespace _Bludoku.Scripts.Score
         private void Awake()
         {
             combo.localScale = Vector3.zero;
+
+            _flyTextPool = new ObjectPool<TMP_Text>(
+                () => Instantiate(flyTextTemplate, flyTextTemplate.transform.parent),
+                text => text.gameObject.SetActive(true),
+                text => text.gameObject.SetActive(false),
+                text => Destroy(text.gameObject),
+                defaultCapacity: 2);
         }
 
         public void UpdateBonus(bool isActive, ClearShape shape, int value)
@@ -61,10 +70,9 @@ namespace _Bludoku.Scripts.Score
 
         public void PlayBonusFly(int bonus, Action onComplete)
         {
-            TMP_Text flyText = Instantiate(flyTextTemplate, flyTextTemplate.transform.parent);
+            TMP_Text flyText = _flyTextPool.Get();
             SetValueText(flyText, bonus);
             flyText.transform.position = comboText.transform.position;
-            flyText.gameObject.SetActive(true);
 
             SetValueText(comboText, bonus);
             comboText.enabled = false;
@@ -74,7 +82,7 @@ namespace _Bludoku.Scripts.Score
                 .OnComplete(() =>
                 {
                     _flyTween = null;
-                    Destroy(flyText.gameObject);
+                    _flyTextPool.Release(flyText);
                     ShowNewValue();
                     onComplete?.Invoke();
                 });
@@ -119,7 +127,7 @@ namespace _Bludoku.Scripts.Score
             _pulseTween?.Kill();
             _pulseTween = null;
             combo.localScale = _isComboActive ? Vector3.one : Vector3.zero;
-            _flyTween?.Kill();
+            _flyTween?.Complete();
             _flyTween = null;
             comboText.transform.DOKill();
             comboText.enabled = true;
